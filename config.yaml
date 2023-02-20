@@ -1,0 +1,100 @@
+################## BASE CONFIGURATION ##################
+# The base config used for all feeds unless overridden #
+########################################################
+base:
+  title: RETROFEED
+  credit: Copyright (C) Jeff Jetton
+  version: 0.2.0
+  pause_time: 0           # Time to pause at random intervals
+  line_width: 40          # Width of the display in characters
+  segment_delay: 6        # Time between major segments
+  subsegment_delay: 1     # If a segment has multiple identical items time between those
+  print_delay: 0.05       # Time between normally-printed characters
+  newline_delay: 0.01     # Time between characters when doing a slow newline
+  verbose_updates: True   # Display a message when refreshing segment data?
+
+
+########################
+### FEED DEFINITIONS ###
+########################
+full_datetime: &date # define a feed and give it a tag (anchor) to refer to later
+  feed_class: DatetimeFeed # the class to use for this feed, find in feeds
+  format: "%A %B " # see https://strftime.org/ for options
+  descriptive: True
+
+short_datetime:
+  <<: *date # this means use the same config as full_datetime, with overrides below
+  descriptive: False
+  segment_delay: 2 # example of overriding a base config value
+
+full_news: &news
+  feed_class: NewsFeed
+  refresh: 20
+  items: 3
+  max_items: 15
+  cycle: True
+  show_summary: True
+  header: ['!', 'AP News Summaries', '!']
+  update_msg: 'Getting Latest News'
+
+news_headlines:
+  <<: *news
+  items: 15
+  cycle: False
+  show_summary: False
+  header: ['!', 'AP News Headlines', '!']
+  update_msg: 'Updating News Data'
+
+finance:
+  feed_class: FinanceFeed
+  refresh: 13
+  header: ['$', 'Stocks', '$']
+  update_msg: 'Updating Financial Data'
+
+full_weather_nashville: &wx_nashville
+  feed_class: WeatherFeed
+  lat: 36.118542
+  lon: -86.798358
+  location: 'Nashville Intl Airport (BNA)'  # Overrides location from web page
+  periods: 5         # Max forecast periods to show during full weather display
+  refresh: 22
+  update_msg: 'Updating Weather Data'
+
+short_weather_nashville:
+  <<: *wx_nashville
+  periods: 1
+  header: null
+
+iss:
+  feed_class: ISSFeed
+  refresh: 7200
+  update_msg: 'Updating Station Data'
+  country: United_States
+  region: Tennessee
+  city: Nashville
+  max_sightings: 3
+  header: ['>', 'Spot the Station', '<']
+
+
+####### SEQUENCE DEFINITION #######
+# Order of feeds in the main loop #
+###################################
+sequence:
+  - full_datetime
+  - full_weather_nashville
+  - short_datetime
+  - full_news
+  - short_datetime
+  - short_weather_nashville
+  - short_datetime
+  - full_news
+  - iss
+  - full_datetime
+  - full_weather_nashville
+  - short_datetime
+  - full_news
+  - short_datetime
+  - short_weather_nashville
+  - short_datetime
+  - full_news
+  - finance
