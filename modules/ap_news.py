@@ -1,6 +1,6 @@
 import datetime as dt
 import requests
-import string_processing as sp
+from modules import string_processing as sp
 
 
     
@@ -30,7 +30,6 @@ def get_summary(s):
 def get_news():
     
     news = {'fetched_on':dt.datetime.now(),
-            'item_index':0,
             'items':[],
            }
     url = 'https://apnews.com'

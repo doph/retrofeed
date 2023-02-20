@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import datetime as dt
 import requests
-import string_processing as sp
+from modules import string_processing as sp
 
 
 

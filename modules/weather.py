@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import datetime as dt
 import requests
-import string_processing as sp
+from modules import string_processing as sp
 
 
 
@@ -60,7 +60,7 @@ def get_weather(lat, lon, location=None):
 
     wx['conditions_location'] = sp.clean_chars(soup.find('h2', 'panel-title').string)
     if wx['location'] == None:
-        wx['location'] = ['conditions_location']
+        wx['location'] = wx['conditions_location']
     wx['currently'] = sp.clean_chars(soup.find('p', 'myforecast-current').string)
     wx['temp_f'] = sp.clean_chars(soup.find('p', 'myforecast-current-lrg').string)
     wx['temp_c'] = sp.clean_chars(soup.find('p', 'myforecast-current-sm').string)
@@ -74,15 +74,15 @@ def get_weather(lat, lon, location=None):
         else:
             wx[key] = sp.clean_chars(cell.string)
             key = None
-    
+    '''
     # Try to convert the "last_update" text to a real datetime value
     if 'last_update' in wx:
         # Assume year is current year (possibly inaccurate just after
         # midnight on New Year's Eve... oh well)
         dt_string = f"{dt.datetime.now().year} {wx['last_update']}"
-        dt_object = dt.datetime.strptime(dt_string, '%Y %d %b %I:%M %p %Z')   #31 Jan 3:53 pm CST
+        dt_object = dt.datetime.strptime(dt_string, "%Y %d %b %I:%M %p %Z")   #31 Jan 3:53 pm CST
         wx['last_update_dt'] = dt_object
-    
+    '''
     # Text description of the dewpoint
     wx['comfort'] = get_comfort_from_dewpoint(wx['dewpoint'])
     
