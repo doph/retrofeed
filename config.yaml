@@ -14,15 +14,15 @@ base:
   verbose_updates: True   # Display a message when refreshing segment data?
 
 
-########################
-### FEED DEFINITIONS ###
-########################
+################ FEED DEFINITIONS ################
+# Each feed in the sequence must be defined here #
+##################################################
 full_datetime: &date # define a feed and give it a tag (anchor) to refer to later
-  feed_class: DatetimeFeed # the class to use for this feed, find in feeds
+  feed_class: DatetimeFeed # the class to use for this feed, find in feeds.py
   format: "%A %B " # see https://strftime.org/ for options
   descriptive: True
 
-short_datetime:
+short_datetime: # these names can be anything, as long as they are unique
   <<: *date # this means use the same config as full_datetime, with overrides below
   descriptive: False
   segment_delay: 2 # example of overriding a base config value
@@ -67,7 +67,7 @@ short_weather_nashville:
 
 iss:
   feed_class: ISSFeed
-  refresh: 7200
+  refresh: 720
   update_msg: 'Updating Station Data'
   country: United_States
   region: Tennessee
@@ -78,6 +78,7 @@ iss:
 
 ####### SEQUENCE DEFINITION #######
 # Order of feeds in the main loop #
+# Use the names defined above     #
 ###################################
 sequence:
   - full_datetime
