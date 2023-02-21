@@ -7,7 +7,7 @@ from modules import string_processing as sp
 SYMBOLS = {'^GSPC':'S&P 500',
            '^DJI': 'Dow Jones',
            '^IXIC':'NASDAQ',
-           '^RUT' :'Russell',
+           '^TSLA' :'Te$la',
           }
           
           
@@ -39,20 +39,21 @@ def parse_indexes(streamers):
     return ind
 
 
-def process_indexes(ind):
+def process_indexes(ind, symbols):
     # Translates symbols and only returns the symbols we have names for
     new_ind = []
     for i in ind:
-        if i['symbol'] not in SYMBOLS:
+        print(i)
+        if i['symbol'] not in symbols.keys():
             continue
-        i['name'] = SYMBOLS[i['symbol']]
+        i['name'] = symbols[i['symbol']]
         new_ind.append(i)
         
     return new_ind
 
 
     
-def get_finance():
+def get_finance(symbols):
     
     fin = {'fetched_on':dt.datetime.now(),
            'market_message':'',
@@ -70,7 +71,7 @@ def get_finance():
         fin['market_message'] = sp.clean_chars(msg.contents[0])
     streamers = soup.find_all('fin-streamer')
     fin['indexes'] = parse_indexes(streamers)
-    fin['indexes'] = process_indexes(fin['indexes'])
+    fin['indexes'] = process_indexes(fin['indexes'], symbols)
     return fin
 
 
