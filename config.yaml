@@ -48,20 +48,35 @@ news_headlines:
 finance:
   feed_class: FinanceFeed
   refresh: 13
+  symbols: {'^GSPC': 'S&P 500', '^TSLA': 'Tesla', '^GME': 'Gamestop'}
   header: ['$', 'Stocks', '$']
   update_msg: 'Updating Financial Data'
 
-full_weather_nashville: &wx_nashville
+full_weather_lax: &wx_lax
   feed_class: WeatherFeed
-  lat: 36.118542
-  lon: -86.798358
-  location: 'Nashville Intl Airport (BNA)'  # Overrides location from web page
+  lat: 33.9416
+  lon: -118.4085
+  location: 'Los Angeles International Airport (LAX)'  # Overrides location from web page
   periods: 5         # Max forecast periods to show during full weather display
   refresh: 22
   update_msg: 'Updating Weather Data'
 
-short_weather_nashville:
-  <<: *wx_nashville
+short_weather_lax:
+  <<: *wx_lax
+  periods: 1
+  header: null
+
+full_weather_morongo: &wx_morongo
+  feed_class: WeatherFeed
+  lat: 34.0470
+  lon: -116.5808
+  location: 'Morongo Valley (CA)'  # Overrides location from web page
+  periods: 5         # Max forecast periods to show during full weather display
+  refresh: 22
+  update_msg: 'Updating Weather Data'
+
+short_weather_morongo:
+  <<: *wx_morongo
   periods: 1
   header: null
 
@@ -70,8 +85,8 @@ iss:
   refresh: 720
   update_msg: 'Updating Station Data'
   country: United_States
-  region: Tennessee
-  city: Nashville
+  region: California
+  city: Los_Angeles
   max_sightings: 3
   header: ['>', 'Spot the Station', '<']
 
@@ -82,20 +97,24 @@ iss:
 ###################################
 sequence:
   - full_datetime
-  - full_weather_nashville
+  - full_weather_lax
+  - full_weather_morongo
   - short_datetime
   - full_news
   - short_datetime
-  - short_weather_nashville
+  - short_weather_lax
   - short_datetime
   - full_news
   - iss
   - full_datetime
-  - full_weather_nashville
+  - full_weather_lax
   - short_datetime
   - full_news
   - short_datetime
-  - short_weather_nashville
+  - short_weather_lax
   - short_datetime
   - full_news
+  - finance
+
+test_sequence:
   - finance

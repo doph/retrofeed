@@ -176,7 +176,7 @@ class FinanceFeed(BaseFeed):
         self._update_config(config)
 
     def _set_data(self):
-        self.data = finance.get_finance()
+        self.data = finance.get_finance(self.config.symbols)
 
     def _set_content(self):
         self.content = []       
